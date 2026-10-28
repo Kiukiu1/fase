@@ -1,0 +1,60 @@
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.dot {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+
+.CALL .dot {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.STATUS .dot {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.title {
+  font-weight: 600;
+}
+
+.detail {
+  white-space: pre-wrap;
+  color: var(--color-icon-muted);
+  font-size: 14px;
+}
+
+.meta {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập · Fase-CRM</title>
+    <link rel="icon" type="image/svg+xml" href="/cms/resources/images/logo-mark.svg">
+    <link rel="stylesheet" href="/cms/resources/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="/cms/resources/plugin/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/cms/resources/css/cms.css">
+</head>
+<body class="hold-transition login-page">
+<div class="login-wrap">
+    <div class="login-panel">
+        <div class="brand"><img src="/cms/resources/images/logo.svg" alt="FASE CRM" width="168" height="40"></div>
+        <div class="card">
+            <div class="card-body">
+                {{> alert}}
+                <h1>Đăng nhập Fase-CRM</h1>
+                <p class="text-center text-muted small">Dành cho Trưởng phòng Sales</p>
+                <form method="post" action="/cms/login" autocomplete="on">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập</label>
+                        <input id="username" name="username" class="form-control" required autofocus autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input id="password" name="password" type="password" class="form-control" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt mr-2"></i>Đăng nhập</button>
+                </form>
+                <p class="text-center text-muted small mt-4 mb-0">Tài khoản do quản trị viên hệ thống cấp. Nhân viên Sales vui lòng dùng Fase-Sales.</p>
+            </div>
+        </div>
+    </div>
+    <div class="login-hero">
+        <h2>Chia LEAD nhanh,<br>chăm sóc <em>đúng hạn</em></h2>
+        <p class="text-muted">Tập trung kho LEAD của phòng Sales vào một nơi, phân cho nhân viên chỉ với vài cú nhấp và theo dõi tiến độ chăm sóc theo từng trạng thái.</p>
+        <ul>
+            <li><i class="far fa-check-circle"></i>Import LEAD từ file Excel, tự ghi đè LEAD trùng</li>
+            <li><i class="far fa-check-circle"></i>Chia đều hoặc chia thủ công cho nhân viên</li>
+            <li><i class="far fa-check-circle"></i>Tự trả LEAD về kho khi quá 2 giờ không nhận</li>
+        </ul>
+        <span class="tag">Fase-CRM · Phòng Sales</span>
+    </div>
+</div>
+<script src="/cms/resources/plugin/jquery/jquery.min.js"></script>
+<script src="/cms/resources/plugin/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/cms/resources/adminlte/js/adminlte.min.js"></script>
+<script src="/cms/resources/js/cms.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{{#extend "title"}}Tổng quan{{/extend}}
+{{#extend "subtitle"}}Tình hình kho LEAD và tiến độ chăm sóc của phòng.{{/extend}}
+<div class="hero">
+    <h2>Xin chào, {{user.fullName}}</h2>
+    <p>Kho đang có <b>{{pool}}</b> LEAD chưa phân, <b>{{pending}}</b> LEAD chờ nhân viên nhận và <b>{{active}}</b> LEAD đang được chăm sóc.</p>
+</div>
+<div class="row">
+    <div class="col-6 col-lg-3"><a href="/cms/leads?scope=POOL" class="stat-card text-reset">
+        <span class="stat-icon"><i class="fas fa-warehouse"></i></span>
+        <span><span class="stat-label d-block">Trong kho</span><span class="stat-value">{{pool}}</span></span>
+    </a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/leads?status=ASSIGNED" class="stat-card warn text-reset">
+        <span class="stat-icon"><i class="fas fa-hourglass-half"></i></span>
+        <span><span class="stat-label d-block">Chờ nhận</span><span class="stat-value">{{pending}}</span></span>
+    </a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/leads?scope=HELD" class="stat-card text-reset">
+        <span class="stat-icon"><i class="fas fa-headset"></i></span>
+        <span><span class="stat-label d-block">Đang chăm sóc</span><span class="stat-value">{{active}}</span></span>
+    </a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/leads?status=WON" class="stat-card success text-reset">
+        <span class="stat-icon"><i class="fas fa-handshake"></i></span>
+        <span><span class="stat-label d-block">Đã chốt · tỷ lệ {{winRate}}%</span><span class="stat-value">{{won}}</span></span>
+    </a></div>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">LEAD theo trạng thái ({{total}})</h3></div>
+            <div class="card-body">
+                {{#each statusRows}}
+                <a href="/cms/leads?status={{status}}" class="status-row text-reset">
+                    <span class="status-row-label">{{> status_badge status=status}}</span>
+                    <span class="progress flex-fill"><span class="progress-bar" style="width: {{percent}}%"></span></span>
+                    <span class="status-row-count">{{count}}</span>
+                </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Việc nhanh</h3></div>
+            <div class="card-body d-flex flex-column" style="gap:.6rem">
+                <a href="/cms/imports" class="btn btn-primary"><i class="fas fa-file-import mr-2"></i>Import LEAD từ Excel</a>
+                <a href="/cms/leads?scope=POOL" class="btn btn-outline-primary"><i class="fas fa-random mr-2"></i>Phân LEAD trong kho</a>
+                <a href="/cms/staff" class="btn btn-outline-primary"><i class="fas fa-users mr-2"></i>Xem {{salesCount}} nhân viên</a>
+            </div>
+            <div class="card-footer text-muted small">Tỷ lệ chốt = Đã chốt / LEAD đã kết thúc ({{terminal}}). Dashboard chi tiết và AI đánh giá nhân viên sẽ có ở phase sau.</div>
+        </div>
+    </div>
+</div>

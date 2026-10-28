@@ -1,0 +1,21 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+.footer {
+  padding: 18px 20px;
+  background: var(--color-footer);
+  color: var(--color-footer-text);
+  font-size: 13px;
+  text-align: center;
+}

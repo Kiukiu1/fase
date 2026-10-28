@@ -1,0 +1,8 @@
+{{#extend "title"}}{{#if (eq status 403)}}Không có quyền{{else}}{{#if (eq status 404)}}Không tìm thấy{{else}}Lỗi {{status}}{{/if}}{{/if}}{{/extend}}
+<div class="card card-outline card-danger">
+    <div class="card-body">
+        <h5><i class="fas fa-ban text-danger"></i> {{#if (eq status 403)}}Không có quyền{{else}}Lỗi {{status}}{{/if}}</h5>
+        <p class="mb-3">{{message}}</p>
+        <a href="javascript:history.back()" class="btn btn-default btn-sm"><i class="fas fa-arrow-left mr-1"></i> Quay lại</a>
+    </div>
+</div>

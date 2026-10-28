@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{{block "title"}}} · Fase-CRM</title>
+    <link rel="icon" type="image/svg+xml" href="/cms/resources/images/logo-mark.svg">
+    <link rel="stylesheet" href="/cms/resources/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="/cms/resources/plugin/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/cms/resources/css/cms.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    {{> header}}
+    {{> sidebar}}
+    <div class="content-wrapper">
+        {{> content_header}}
+        <section class="content">
+            <div class="container-fluid">
+                {{> alert}}
+                {{{body}}}
+            </div>
+        </section>
+    </div>
+    {{> footer}}
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <form method="post" id="confirmForm" class="modal-content">
+            <div id="confirmInputs"></div>
+            <div class="modal-body text-center">
+                <p class="mb-1 font-weight-bold" id="confirmTitle">Bạn có chắc chắn không?</p>
+                <p class="text-muted mb-0" id="confirmName"></p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+                <button type="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/cms/resources/plugin/jquery/jquery.min.js"></script>
+<script src="/cms/resources/plugin/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/cms/resources/adminlte/js/adminlte.min.js"></script>
+<script src="/cms/resources/js/cms.js"></script>
+{{{block "scripts"}}}
+</body>
+</html>

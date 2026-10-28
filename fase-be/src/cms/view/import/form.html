@@ -1,0 +1,44 @@
+{{#extend "title"}}Import LEAD{{/extend}}
+{{#extend "subtitle"}}Tải lên file Excel (.xlsx) do phòng Marketing gửi sang. Hệ thống kiểm tra từng dòng trước khi lưu vào kho.{{/extend}}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Tải file lên</h3></div>
+            <div class="card-body">
+                <form method="post" action="/cms/imports" enctype="multipart/form-data">
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input" id="file" name="file" accept=".xlsx" required>
+                        <label class="custom-file-label" for="file" data-browse="Chọn file">Chọn file .xlsx…</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search mr-1"></i> Kiểm tra &amp; xem trước</button>
+                    <a href="/cms/imports/template" class="btn btn-link"><i class="fas fa-download mr-1"></i> Tải file mẫu</a>
+                </form>
+            </div>
+            <div class="card-footer small text-muted">
+                <b>Cột bắt buộc:</b> MST, SĐT, Địa chỉ, Gói dịch vụ, Ngày quan tâm (dd/mm/yyyy). Tối đa 10.000 dòng, 10 MB.<br>
+                <b>LEAD trùng</b> (cùng MST hoặc SĐT với LEAD đã có trong kho) sẽ được <b>ghi đè thông tin</b>; trạng thái, người được phân và lịch sử chăm sóc giữ nguyên.
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Lượt import gần đây</h3></div>
+            <div class="card-body p-0">
+                <table class="table mb-0">
+                    <thead><tr><th>File</th><th>Thời gian</th><th>Kết quả</th></tr></thead>
+                    <tbody>
+                    {{#each imports}}
+                    <tr>
+                        <td><a href="/cms/imports/{{id}}">{{fileName}}</a></td>
+                        <td class="small">{{vnDateTime dateCreated}}</td>
+                        <td class="small">{{#if confirmedAt}}<span class="badge badge-success">Đã lưu</span> +{{createdCount}} mới · {{overwrittenCount}} ghi đè{{else}}<span class="badge badge-secondary">Chưa xác nhận</span>{{/if}}</td>
+                    </tr>
+                    {{else}}
+                    <tr><td colspan="3" class="text-muted">Chưa có lượt import nào.</td></tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

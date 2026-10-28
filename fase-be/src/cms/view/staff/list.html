@@ -1,0 +1,24 @@
+{{#extend "title"}}Nhân viên{{/extend}}
+{{#extend "subtitle"}}Nhân viên Sales thuộc phòng. Tài khoản do quản trị viên hệ thống tạo.{{/extend}}
+<div class="table-wrap">
+    <table class="table table-bordered table-hover mb-0">
+        <thead><tr><th style="width:60px">STT</th><th>Họ tên</th><th>Tên đăng nhập</th><th>Email</th><th>Chờ nhận</th><th>Đang chăm sóc</th><th>Đã kết thúc</th><th>Đã chốt</th><th style="width:60px"></th></tr></thead>
+        <tbody>
+        {{#each staff}}
+        <tr>
+            <td>{{add @index 1}}</td>
+            <td>{{fullName}}</td>
+            <td>{{username}}</td>
+            <td>{{email}}</td>
+            <td>{{#if pending}}<span class="badge badge-warning">{{pending}}</span>{{else}}0{{/if}}</td>
+            <td>{{active}}</td>
+            <td>{{closed}}</td>
+            <td>{{#if won}}<span class="badge badge-success">{{won}}</span>{{else}}0{{/if}}</td>
+            <td class="action-cell"><a href="/cms/leads?salesId={{id}}" class="btn-icon" title="Xem LEAD của nhân viên"><i class="fas fa-list"></i></a></td>
+        </tr>
+        {{else}}
+        <tr><td colspan="9" class="text-muted p-3">Phòng chưa có nhân viên Sales. Liên hệ quản trị viên để tạo tài khoản.</td></tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+{{#extend "title"}}Xem trước import{{/extend}}
+{{#extend "subtitle"}}{{leadImport.fileName}} · tải lên lúc {{vnDateTime leadImport.dateCreated}}{{/extend}}
+{{#extend "breadcrumb"}}<li class="breadcrumb-item"><a href="/cms/imports">Import LEAD</a></li>{{/extend}}
+<div class="row">
+    <div class="col-6 col-lg-3"><a href="/cms/imports/{{leadImport.id}}" class="stat-card text-reset"><span class="stat-icon"><i class="fas fa-list"></i></span><span><span class="stat-label d-block">Tổng số dòng</span><span class="stat-value">{{summary.total}}</span></span></a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/imports/{{leadImport.id}}?action=CREATE" class="stat-card success text-reset"><span class="stat-icon"><i class="fas fa-plus"></i></span><span><span class="stat-label d-block">Thêm mới</span><span class="stat-value">{{summary.create}}</span></span></a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/imports/{{leadImport.id}}?action=OVERWRITE" class="stat-card warn text-reset"><span class="stat-icon"><i class="fas fa-sync-alt"></i></span><span><span class="stat-label d-block">Ghi đè LEAD trùng</span><span class="stat-value">{{summary.overwrite}}</span></span></a></div>
+    <div class="col-6 col-lg-3"><a href="/cms/imports/{{leadImport.id}}?action=ERROR" class="stat-card danger text-reset"><span class="stat-icon"><i class="fas fa-exclamation-triangle"></i></span><span><span class="stat-label d-block">Lỗi (bỏ qua)</span><span class="stat-value">{{summary.error}}</span></span></a></div>
+</div>
+
+{{#if leadImport.confirmedAt}}
+<div class="alert alert-light border">Đã xác nhận lúc {{vnDateTime leadImport.confirmedAt}}: thêm mới <b>{{leadImport.createdCount}}</b>, ghi đè <b>{{leadImport.overwrittenCount}}</b> LEAD. <a href="/cms/leads?scope=POOL">Xem kho LEAD</a></div>
+{{else}}
+<div class="d-flex align-items-center flex-wrap mb-3" style="gap:.75rem">
+    {{#if (gt (add summary.create summary.overwrite) 0)}}
+    <form method="post" action="/cms/imports/{{leadImport.id}}/confirm" class="m-0">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-check mr-1"></i> Xác nhận lưu {{add summary.create summary.overwrite}} LEAD</button>
+    </form>
+    {{/if}}
+    <a href="/cms/imports" class="btn btn-default">Chọn file khác</a>
+    {{#if summary.error}}<span class="text-muted small">{{summary.error}} dòng lỗi sẽ bị bỏ qua – sửa file rồi import lại nếu cần.</span>{{/if}}
+</div>
+{{/if}}
+
+<div class="table-wrap">
+    <table class="table table-bordered mb-0">
+        <thead><tr><th style="width:70px">Dòng</th><th>Kết quả</th><th>MST</th><th>SĐT</th><th>Địa chỉ</th><th>Gói dịch vụ</th><th>Ngày quan tâm</th><th>Lỗi</th></tr></thead>
+        <tbody>
+        {{#each rows}}
+        <tr class="{{#if (eq action 'ERROR')}}row-error{{/if}}">
+            <td>{{rowNumber}}</td>
+            <td>{{#if (eq action 'CREATE')}}<span class="badge badge-success">Thêm mới</span>{{/if}}{{#if (eq action 'OVERWRITE')}}<span class="badge badge-warning">Ghi đè</span>{{/if}}{{#if (eq action 'ERROR')}}<span class="badge badge-danger">Lỗi</span>{{/if}}</td>
+            <td>{{mst}}</td><td>{{phone}}</td><td>{{address}}</td><td>{{servicePackage}}</td>
+            <td>{{#if (eq action 'ERROR')}}{{interestedDate}}{{else}}{{vnDate interestedDate}}{{/if}}</td>
+            <td class="text-danger small">{{#each errors}}<div>{{this}}</div>{{/each}}</td>
+        </tr>
+        {{else}}
+        <tr><td colspan="8" class="text-muted p-3">Không có dòng nào.</td></tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{> paging}}

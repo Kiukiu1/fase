@@ -1,0 +1,30 @@
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto align-items-center">
+        <li class="nav-item">
+            <a class="nav-link bell-link" href="/cms/notifications" title="Thông báo">
+                <i class="far fa-bell"></i>
+                {{#if (gt unreadCount 0)}}<span class="badge badge-danger navbar-badge">{{unreadCount}}</span>{{/if}}
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link d-flex align-items-center" data-toggle="dropdown" href="#" role="button">
+                <span class="user-chip mr-2">{{upcase (truncate user.fullName 1 "")}}</span>
+                <span class="d-none d-sm-inline mr-1">{{user.fullName}}</span>
+                <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <span class="dropdown-item-text text-muted small">Trưởng phòng · {{user.username}}</span>
+                <div class="dropdown-divider"></div>
+                <a href="/cms/account/password" class="dropdown-item"><i class="fas fa-key mr-2"></i> Đổi mật khẩu</a>
+                <form method="post" action="/cms/logout" class="m-0">
+                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</nav>

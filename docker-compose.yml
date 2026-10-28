@@ -1,0 +1,52 @@
+# FASE: db (PostgreSQL) + api (NestJS: API + Fase-CRM /cms) + web (Fase-Sales, nginx proxy)
+#   docker compose up -d --build        -> http://localhost:8080 (Sales), http://localhost:8080/cms (CRM)
+#   docker compose up -d db             -> chỉ bật DB để dev local (cổng 5433)
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fase-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-fase}
+      TZ: Asia/Ho_Chi_Minh
+    ports:
+      - "5433:5432"
+    volumes:
+      - fase_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-fase}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ./fase-be
+    container_name: fase-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./fase-be/.env
+    environment:
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      FRONTEND_URL: http://localhost:8080
+
+  web:
+    build:
+      context: ./fase-fe
+    container_name: fase-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  fase_pg:

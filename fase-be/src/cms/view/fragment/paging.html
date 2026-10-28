@@ -1,0 +1,18 @@
+{{#if (gt total pageSize)}}
+{{#with (ceil (divide total pageSize)) as |lastPage|}}
+<div class="card-footer clearfix">
+    <span class="float-left text-muted">Tổng {{@root.total}} kết quả</span>
+    <ul class="pagination pagination-sm m-0 float-right">
+        <li class="page-item {{#if (eq @root.page 1)}}disabled{{/if}}">
+            <a class="page-link" href="{{@root.pageBase}}page={{add @root.page -1}}">&laquo;</a>
+        </li>
+        {{#each (pageNumbers @root.page @root.total)}}
+        <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="{{@root.pageBase}}page={{number}}">{{number}}</a></li>
+        {{/each}}
+        <li class="page-item {{#if (eq @root.page lastPage)}}disabled{{/if}}">
+            <a class="page-link" href="{{@root.pageBase}}page={{add @root.page 1}}">&raquo;</a>
+        </li>
+    </ul>
+</div>
+{{/with}}
+{{/if}}

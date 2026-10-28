@@ -1,0 +1,113 @@
+{{#extend "title"}}Kho LEAD{{/extend}}
+{{#extend "subtitle"}}Tìm, lọc và phân LEAD cho nhân viên. Tick chọn nhiều LEAD rồi bấm "Phân LEAD".{{/extend}}
+<div class="toolbar">
+    <a href="/cms/leads" class="chip {{#unless (or filter.scope filter.status)}}active{{/unless}}">Tất cả</a>
+    <a href="/cms/leads?scope=POOL" class="chip {{#if (eq filter.scope 'POOL')}}active{{/if}}">Trong kho ({{poolCount}})</a>
+    <a href="/cms/leads?scope=HELD" class="chip {{#if (eq filter.scope 'HELD')}}active{{/if}}">Đang được phân ({{heldCount}})</a>
+    <a href="/cms/leads?scope=TERMINAL" class="chip {{#if (eq filter.scope 'TERMINAL')}}active{{/if}}">Đã kết thúc</a>
+    <a href="/cms/imports" class="btn btn-primary ml-auto"><i class="fas fa-file-import mr-1"></i> Import</a>
+</div>
+<form method="get" action="/cms/leads" class="toolbar filter-bar">
+    {{#if filter.scope}}<input type="hidden" name="scope" value="{{filter.scope}}">{{/if}}
+    <div class="search-box"><input type="search" name="keyword" value="{{query.keyword}}" placeholder="Tìm theo MST hoặc SĐT"><button type="submit" class="search-btn"><i class="fas fa-search"></i></button></div>
+    <select name="status" class="custom-select">
+        <option value="">Mọi trạng thái</option>
+        {{#each statuses}}<option value="{{status}}" {{#if (eq status @root.filter.status)}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+    <select name="servicePackage" class="custom-select">
+        <option value="">Mọi gói dịch vụ</option>
+        {{#each servicePackages}}<option value="{{this}}" {{#if (eq this @root.filter.servicePackage)}}selected{{/if}}>{{this}}</option>{{/each}}
+    </select>
+    <select name="salesId" class="custom-select">
+        <option value="">Mọi nhân viên</option>
+        {{#each sales}}<option value="{{id}}" {{#if (eq id @root.filter.salesId)}}selected{{/if}}>{{fullName}}</option>{{/each}}
+    </select>
+    <span class="date-range"><span class="text-muted small">Ngày quan tâm</span>
+        <input type="date" name="from" value="{{filter.interestedFrom}}" class="form-control">
+        <span>–</span>
+        <input type="date" name="to" value="{{filter.interestedTo}}" class="form-control">
+    </span>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-filter mr-1"></i> Lọc</button>
+    <a href="/cms/leads{{#if filter.scope}}?scope={{filter.scope}}{{/if}}" class="btn btn-default">Xoá lọc</a>
+</form>
+
+<div class="selection-bar" id="selectionBar" hidden>
+    <span><b id="selectedCount">0</b> LEAD đã chọn</span>
+    <button type="button" class="btn btn-primary btn-sm" id="assignBtn" data-toggle="modal" data-target="#assignModal"><i class="fas fa-random mr-1"></i> Phân LEAD</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="revokeBtn" data-bulk-action="/cms/leads/revoke" data-confirm-title="Thu hồi các LEAD đã chọn về kho?"><i class="fas fa-undo mr-1"></i> Thu hồi</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="reopenBtn" data-bulk-action="/cms/leads/reopen" data-confirm-title="Mở lại các LEAD đã chọn và đưa về kho?"><i class="fas fa-box-open mr-1"></i> Mở lại</button>
+    <button type="button" class="btn btn-link btn-sm" id="clearSelection">Bỏ chọn</button>
+</div>
+
+<div class="table-wrap">
+    <table class="table table-bordered table-hover mb-0" id="leadTable">
+        <thead><tr>
+            <th style="width:40px"><input type="checkbox" id="checkAll" title="Chọn cả trang"></th>
+            <th style="width:56px">STT</th><th>MST</th><th>SĐT</th><th>Địa chỉ</th><th>Gói dịch vụ</th><th>Ngày quan tâm</th><th>Trạng thái</th><th>Nhân viên</th><th>Hạn nhận / Nhận lúc</th><th style="width:60px"></th>
+        </tr></thead>
+        <tbody>
+        {{#each leads}}
+        <tr data-id="{{id}}" data-pool="{{inPool}}" data-revocable="{{revocable}}" data-reopenable="{{reopenable}}">
+            <td><input type="checkbox" class="row-check" value="{{id}}" {{#if (eq status 'WON')}}disabled title="LEAD đã chốt"{{/if}}></td>
+            <td>{{rowIndex @root.page @index}}</td>
+            <td class="text-nowrap">{{mst}}</td>
+            <td class="text-nowrap">{{phone}}</td>
+            <td>{{address}}</td>
+            <td>{{servicePackage}}</td>
+            <td>{{vnDate interestedDate}}</td>
+            <td>{{> status_badge status=status}}{{#if (eq status 'NO_ANSWER_RETRY')}} <span class="text-muted small">{{noAnswerCount}}/7</span>{{/if}}</td>
+            <td>{{#if assignedTo}}{{assignedTo.fullName}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
+            <td class="small text-nowrap">{{#if (eq status 'ASSIGNED')}}<span class="text-warning">Hạn {{vnDateTime receiveDeadline}}</span>{{else}}{{#if receivedAt}}{{vnDateTime receivedAt}}{{else}}<span class="text-muted">—</span>{{/if}}{{/if}}</td>
+            <td class="action-cell"><a href="/cms/leads/{{id}}" class="btn-icon" title="Chi tiết"><i class="fas fa-eye"></i></a></td>
+        </tr>
+        {{else}}
+        <tr><td colspan="11" class="text-muted p-3">Không có LEAD nào. <a href="/cms/imports">Import LEAD từ Excel</a></td></tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{> paging}}
+
+<div class="modal fade" id="assignModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form method="post" action="/cms/leads/assign" class="modal-content" id="assignForm">
+            <input type="hidden" name="returnTo" value="{{returnTo}}">
+            <div id="assignLeadInputs"></div>
+            <div class="modal-header">
+                <h5 class="modal-title">Phân <b class="js-selected-count">0</b> LEAD cho nhân viên</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
+                    <label class="btn btn-outline-primary active"><input type="radio" name="mode" value="EVEN" checked> Chia đều</label>
+                    <label class="btn btn-outline-primary"><input type="radio" name="mode" value="MANUAL"> Chia thủ công</label>
+                </div>
+                <p class="text-muted small mb-2" id="modeHint">Chọn nhân viên, hệ thống chia lần lượt cho từng người.</p>
+                <div class="list-group sales-picker">
+                    {{#each sales}}
+                    <label class="list-group-item d-flex align-items-center mb-0">
+                        <input type="checkbox" name="salesIds[]" value="{{id}}" class="mr-3 js-sales">
+                        <span class="flex-fill">{{fullName}} <span class="text-muted small">· {{username}}</span></span>
+                        <span class="js-even-share text-muted small mr-2"></span>
+                        <input type="number" min="0" name="counts[{{id}}]" class="form-control form-control-sm js-count" style="width:90px" placeholder="SL" disabled hidden>
+                    </label>
+                    {{else}}
+                    <div class="list-group-item text-muted">Phòng chưa có nhân viên Sales nào.</div>
+                    {{/each}}
+                </div>
+                <p class="mt-2 mb-0 small" id="manualTotal" hidden>Tổng đã nhập: <b id="manualSum">0</b> / <b class="js-selected-count">0</b></p>
+                <div class="custom-control custom-checkbox mt-3">
+                    <input type="checkbox" class="custom-control-input" id="reassign" name="reassign" value="1">
+                    <label class="custom-control-label" for="reassign">Cho phép phân lại LEAD đang được phân / đã kết thúc (người cũ sẽ bị thu hồi)</label>
+                </div>
+                <p class="text-muted small mt-2 mb-0"><i class="far fa-clock mr-1"></i>Nhân viên phải nhận LEAD trong 2 giờ hành chính, quá hạn hệ thống tự trả về kho.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Huỷ</button>
+                <button type="submit" class="btn btn-primary" id="assignSubmit"><i class="fas fa-paper-plane mr-1"></i> Phân LEAD</button>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="post" id="bulkForm" hidden><input type="hidden" name="returnTo" value="{{returnTo}}"><div id="bulkInputs"></div></form>
+{{#extend "scripts"}}<script src="/cms/resources/js/lead-list.js"></script>{{/extend}}

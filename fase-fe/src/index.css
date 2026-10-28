@@ -1,0 +1,152 @@
+:root {
+  --color-primary: #0b6fb8;
+  --color-primary-strong: #005088;
+  --color-primary-soft: #d5e4ff;
+  --color-primary-tint: #ebf2ff;
+  --color-bg: #f3f6fd;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f2f4f7;
+  --color-border: #e2e6ee;
+  --color-border-strong: #b9bbbe;
+  --color-text: #101112;
+  --color-text-muted: #6b7280;
+  --color-text-subtle: #a1a1a1;
+  --color-icon-muted: #2f3e4e;
+  --color-footer: #002f53;
+  --color-footer-text: #ebf2ff;
+  --color-success: #00a352;
+  --color-success-soft: #d6f7e3;
+  --color-danger: #e5303f;
+  --color-danger-soft: #ffe1e3;
+  --color-warning: #b26a00;
+  --color-warning-soft: #fff1d0;
+  --color-info: #0a7ea4;
+  --color-info-soft: #dcf3fb;
+  --color-purple: #6f42c1;
+  --color-purple-soft: #ece4fb;
+  --color-active: #101112;
+  --color-on-active: #ffffff;
+  --banner-gradient: linear-gradient(100deg, #b7defe 0%, #d7ecfe 55%, #eef7ff 100%);
+  --login-gradient: linear-gradient(135deg, #ffffff 0%, #f1f6ff 50%, #dce9ff 100%);
+  --shadow-card: 0 1px 3px rgba(15, 30, 60, 0.08);
+  --shadow-soft: 0 4px 12px rgba(28, 37, 33, 0.08);
+  --shadow-header: 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-popover: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --overlay: rgba(15, 23, 42, 0.35);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  --font-sans: 'Be Vietnam Pro', 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-button: 'Plus Jakarta Sans', 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+
+  --header-height: 68px;
+  --page-max: 1200px;
+
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Form dùng chung */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field > span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-icon-muted);
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  outline: none;
+}
+
+textarea.input {
+  height: auto;
+  min-height: 84px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,37 @@
+<aside class="main-sidebar sidebar-light-primary">
+    <a href="/cms" class="brand-link">
+        <img src="/cms/resources/images/logo-mark.svg" class="brand-image" alt="" width="33" height="33">
+        <span class="brand-text">FASE <small class="text-muted font-weight-normal">CRM</small></span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a href="/cms" class="nav-link {{#if (eq path '/cms')}}active{{/if}}">
+                        <i class="nav-icon fas fa-chart-pie"></i><p>Tổng quan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cms/leads" class="nav-link {{#if (contains path '/cms/leads')}}active{{/if}}">
+                        <i class="nav-icon fas fa-warehouse"></i><p>Kho LEAD</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cms/imports" class="nav-link {{#if (contains path '/cms/imports')}}active{{/if}}">
+                        <i class="nav-icon fas fa-file-import"></i><p>Import LEAD</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cms/staff" class="nav-link {{#if (contains path '/cms/staff')}}active{{/if}}">
+                        <i class="nav-icon fas fa-users"></i><p>Nhân viên</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cms/notifications" class="nav-link {{#if (contains path '/cms/notifications')}}active{{/if}}">
+                        <i class="nav-icon fas fa-bell"></i><p>Thông báo</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

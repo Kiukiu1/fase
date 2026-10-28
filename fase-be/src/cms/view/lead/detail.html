@@ -1,0 +1,75 @@
+{{#extend "title"}}LEAD {{lead.phone}}{{/extend}}
+{{#extend "subtitle"}}MST {{lead.mst}} · {{lead.servicePackage}}{{/extend}}
+{{#extend "breadcrumb"}}<li class="breadcrumb-item"><a href="/cms/leads">Kho LEAD</a></li>{{/extend}}
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header d-flex align-items-center"><h3 class="card-title mr-auto">Thông tin LEAD</h3>{{> status_badge status=lead.status}}</div>
+            <div class="card-body">
+                <dl class="info-list">
+                    <dt>MST</dt><dd>{{lead.mst}}</dd>
+                    <dt>Số điện thoại</dt><dd>{{lead.phone}}</dd>
+                    <dt>Địa chỉ</dt><dd>{{lead.address}}</dd>
+                    <dt>Gói dịch vụ</dt><dd>{{lead.servicePackage}}</dd>
+                    <dt>Ngày quan tâm</dt><dd>{{vnDate lead.interestedDate}}</dd>
+                    <dt>Nhân viên</dt><dd>{{#if lead.assignedTo}}{{lead.assignedTo.fullName}}{{else}}<span class="text-muted">Đang trong kho</span>{{/if}}</dd>
+                    {{#if lead.assignedAt}}<dt>Phân lúc</dt><dd>{{vnDateTime lead.assignedAt}}</dd>{{/if}}
+                    {{#if (eq lead.status 'ASSIGNED')}}<dt>Hạn nhận</dt><dd class="text-warning font-weight-bold">{{vnDateTime lead.receiveDeadline}}</dd>{{/if}}
+                    {{#if lead.receivedAt}}<dt>Nhận lúc</dt><dd>{{vnDateTime lead.receivedAt}}</dd>{{/if}}
+                    {{#if careDeadline}}<dt>Hạn chăm sóc</dt><dd>{{vnDateTime careDeadline}}</dd>{{/if}}
+                    <dt>Số cuộc gọi</dt><dd>{{lead.callCount}}{{#if (eq lead.status 'NO_ANSWER_RETRY')}} · không nghe máy {{lead.noAnswerCount}}/7 ngày{{/if}}</dd>
+                    {{#if lead.nextCallbackAt}}<dt>Hẹn gọi lại</dt><dd>{{vnDateTime lead.nextCallbackAt}}</dd>{{/if}}
+                </dl>
+            </div>
+            <div class="card-footer d-flex flex-wrap" style="gap:.5rem">
+                {{#if reassignable}}<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#assignOne"><i class="fas fa-random mr-1"></i> {{#if inPool}}Phân LEAD{{else}}Phân lại{{/if}}</button>{{/if}}
+                {{#if revocable}}<button type="button" class="btn btn-outline-secondary btn-sm" data-confirm-action="/cms/leads/revoke" data-confirm-title="Thu hồi LEAD này về kho?" data-confirm-name="{{lead.phone}}" data-ids="{{lead.id}}"><i class="fas fa-undo mr-1"></i> Thu hồi về kho</button>{{/if}}
+                {{#if reopenable}}<button type="button" class="btn btn-outline-secondary btn-sm" data-confirm-action="/cms/leads/reopen" data-confirm-title="Mở lại LEAD này và đưa về kho?" data-confirm-name="{{lead.phone}}" data-ids="{{lead.id}}"><i class="fas fa-box-open mr-1"></i> Mở lại</button>{{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Lịch sử chăm sóc</h3></div>
+            <div class="card-body">
+                <ul class="timeline-list">
+                    {{#each timeline}}
+                    <li class="timeline-item kind-{{kind}}">
+                        <span class="timeline-dot"><i class="fas {{#if (eq kind 'CALL')}}fa-phone{{else}}{{#if (eq kind 'STATUS')}}fa-exchange-alt{{else}}fa-user-tag{{/if}}{{/if}}"></i></span>
+                        <div>
+                            <div class="font-weight-bold">{{title}}</div>
+                            {{#if detail}}<div class="timeline-detail">{{detail}}</div>{{/if}}
+                            <div class="text-muted small">{{vnDateTime at}} · {{actorName}}</div>
+                        </div>
+                    </li>
+                    {{else}}
+                    <li class="text-muted">Chưa có hoạt động nào.</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#if reassignable}}
+<div class="modal fade" id="assignOne" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form method="post" action="/cms/leads/assign" class="modal-content">
+            <input type="hidden" name="returnTo" value="{{returnTo}}">
+            <input type="hidden" name="leadIds[]" value="{{lead.id}}">
+            <input type="hidden" name="mode" value="EVEN">
+            <input type="hidden" name="reassign" value="1">
+            <div class="modal-header"><h5 class="modal-title">{{#if inPool}}Phân LEAD{{else}}Phân lại LEAD{{/if}} {{lead.phone}}</h5><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+            <div class="modal-body">
+                <label for="salesSelect">Nhân viên nhận</label>
+                <select id="salesSelect" name="salesIds[]" class="custom-select" required>
+                    <option value="">— Chọn nhân viên —</option>
+                    {{#each sales}}<option value="{{id}}">{{fullName}}{{#if (eq id @root.lead.assignedToId)}} (đang giữ){{/if}}</option>{{/each}}
+                </select>
+                {{#unless inPool}}<p class="text-muted small mt-2 mb-0">Người đang giữ LEAD sẽ bị thu hồi; bộ đếm chăm sóc được đặt lại cho lượt mới.</p>{{/unless}}
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Huỷ</button><button type="submit" class="btn btn-primary">Phân LEAD</button></div>
+        </form>
+    </div>
+</div>
+{{/if}}
